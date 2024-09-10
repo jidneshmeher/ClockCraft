@@ -6,7 +6,7 @@ const port = 3001;
 
 app.use(cors(
   {
-    origin:["https://clock-craft-frontend.vercel.app/"],
+    origin:["https://clock-craft-frontend.vercel.app"],
     methods:["POST","GET"],
     credentials:true
   }
