@@ -122,7 +122,7 @@ export default function CountdownTimer(){
             </div>
             <div className=" flex flex-row max-w-full justify-center ">
               {!playsound ? check ?
-              <div> 
+              <div className="flex"> 
                 <button  onClick={Pause} className="bg-[#E2E2B6] text-xl px-8 py-2 mx-10 rounded-3xl font-bold font-inter">Pause</button>
                 <button onClick={Reset} className="bg-[#E2E2B6] text-xl px-8 py-2 mx-10 rounded-3xl font-bold font-inter">Reset</button>
               </div>:

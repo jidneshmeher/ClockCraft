@@ -20,7 +20,7 @@ export default function WorldClock() {
     setRegion(event.target.value);
   };
 
-  console.log("Running")
+  axios.defaults.withCredentials = true
 
   useEffect(() => {
     // console.log("")
