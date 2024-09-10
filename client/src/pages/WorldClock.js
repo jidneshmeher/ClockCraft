@@ -25,7 +25,7 @@ export default function WorldClock() {
   useEffect(() => {
     // console.log("")
     axios
-      .get("http://localhost:3001/api")
+      .get("https://clock-craft-server.vercel.app/api")
       .then((res) => {
         setTimezones(res.data);
         console.log("Timezones Fetched")
@@ -35,7 +35,7 @@ export default function WorldClock() {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/region", { region })
+      .post("https://clock-craft-server.vercel.app/region", { region })
       .then((res) => {
         let currentTime = new Date(res.data.dateTime)
         let hour = currentTime.getHours()
