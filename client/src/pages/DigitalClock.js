@@ -1,8 +1,13 @@
 import {useEffect, useState} from "react";
+import { useMenu } from "../context/MenuContext";
+
 
 export default function DigitalClock(){
 
     const [time,setTime] = useState("");
+    const {menubar,setMenubar} = useMenu()
+
+    console.log(menubar)
 
     useEffect(()=>{
         console.log("Hi")
@@ -10,14 +15,13 @@ export default function DigitalClock(){
             let hour = new Date().toLocaleTimeString();
             setTime(hour)
         },1000);
-
         return () => clearInterval(timer);
     },[]);
 
-
     return(
         <>
-            {time ? <div className="bg-[#449BDC] max-w-2xl py-8 mx-auto relative top-52 rounded-3xl text-center text-white text-8xl font-inter font-semibold" >
+            <div className="h-calc-100vh-minus-68px text-white mx-[15px] flex items-center justify-center">
+                {!menubar ? (time ? <div className="bg-[#449BDC] mb-20 max-w-full py-5 px-5 rounded-3xl text-center text-5xl text-white font-inter font-semibold  md:max-w-3xl md:py-9 md:text-[115px] " >
                 {time}
             </div>:
             <div className="w-full flex flex-row justify-center absolute top-[45%]">
@@ -28,8 +32,9 @@ export default function DigitalClock(){
                     </svg>
                     <span className="sr-only">Loading...</span>
                 </div>
-            </div>
+            </div>):null
             }
+            </div>
         </>
     );
 }

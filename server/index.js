@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.get("/api", (req, res) => {
   axios
-    .get("http://worldtimeapi.org/api/timezone")
+    .get("https://timeapi.io/api/timezone/availabletimezones")
     .then((response) => {
       res.json(response.data);
     })
@@ -22,7 +22,7 @@ app.get("/api", (req, res) => {
 app.post("/region", (req, res) => {
     const { region } = req.body;
     axios
-      .get("http://worldtimeapi.org/api/timezone/" + region)
+      .get("https://timeapi.io/api/time/current/zone?timeZone=" + region)
       .then((response) => {
         res.json(response.data);
       })

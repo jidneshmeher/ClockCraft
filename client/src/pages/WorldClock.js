@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useMenu } from "../context/MenuContext";
 
 export default function WorldClock() {
   const [timezones, setTimezones] = useState([]);
@@ -11,15 +12,23 @@ export default function WorldClock() {
 
   let timer = null;
 
+  const {menubar} = useMenu()
+
   const hRegion = (event) => {
+    // console.log("Running 2")
+    console.log(event.target.value)
     setRegion(event.target.value);
   };
 
+  console.log("Running")
+
   useEffect(() => {
+    // console.log("")
     axios
       .get("http://localhost:3001/api")
       .then((res) => {
         setTimezones(res.data);
+        console.log("Timezones Fetched")
       })
       .catch((err) => console.log(err));
   }, []);
@@ -28,41 +37,39 @@ export default function WorldClock() {
     axios
       .post("http://localhost:3001/region", { region })
       .then((res) => {
-        console.log("Region sent to the server:", res.data);
-        console.log(res);
-        let time = res.data.datetime.slice(11, 19);
-        let hour = parseInt(res.data.datetime.slice(11, 13));
-        let min = parseInt(res.data.datetime.slice(14, 16));
-        let sec = parseInt(res.data.datetime.slice(17, 19));
+        let currentTime = new Date(res.data.dateTime)
+        let hour = currentTime.getHours()
+        let min = currentTime.getMinutes()
+        let sec = currentTime.getSeconds()
+        console.log(hour , min , sec)
         setHour(hour);
         setMin(min);
-        setSec(sec);
-        timer = setTimeout(() => {
-          timer = setInterval(() => {
-            setSec((prevSec) => {
-              let newSec = prevSec + 1;
-              if (newSec === 60) {
-                newSec = 0;
-                setMin((prevMin) => {
-                  let newMin = prevMin + 1;
-                  if (newMin === 60) {
-                    newMin = 0;
-                    setHour((prevHour) => prevHour + 1);
-                  }
-                  return newMin;
-                });
-              }
-              return newSec;
-            });
-          }, 1000);
-        }, 2000);
+        setSec(sec - 1); // Decrementing sec for processing delay. (This will sync with the timezone in real-time.)
+      })
+      .then(() => {
+        timer = setInterval(() => {
+          setSec((prevSec) => {
+            let newSec = prevSec + 1;
+            if (newSec === 60) {
+              newSec = 0;
+              setMin((prevMin) => {
+                let newMin = prevMin + 1;
+                if (newMin === 60) {
+                  newMin = 0;
+                  setHour((prevHour) => prevHour + 1);
+                }
+                return newMin;
+              });
+            }
+            return newSec;
+          });
+        },1000)
       })
       .catch((err) => {
         console.error("Error sending region to the server:", err);
       });
 
     return () => {
-      clearTimeout(timer);
       clearInterval(timer);
     };
   }, [region]);
@@ -74,14 +81,17 @@ export default function WorldClock() {
     setDatetime(formattedTime);
   }, [hour, min, sec]);
 
+
+
   return (
     <>
-      <div className=" container flex flex-col max-w-2xl py-10 gap-10 mx-auto relative top-32">
-        <div className="bg-[#449BDC] py-8 rounded-3xl text-center text-white text-8xl font-inter font-semibold">
+    {!menubar ? <div className=" h-calc-100vh-minus-68px text-white mx-[15px] flex items-center justify-center">
+      <div className=" flex flex-col items-center max-w-[750px] flex-grow py-10 gap-10">
+        <div className="bg-[#449BDC] max-w-fit p-5 text-5xl rounded-3xl text-center text-white font-inter md:py-10 md:px-20  md:text-[115px]  font-semibold  ">
           {datetime}
         </div>
         <div className="flex flex-row justify-center">
-        {timezones.length ? <select className="w-full max-w-xl py-10 bg-[#E2E2B6] " value={region} onChange={hRegion} autoFocus size={6}>
+        {timezones.length ? <select className="w-full text-2xl md:py-8 max-w-xl bg-[#E2E2B6] " value={region} onChange={hRegion} autoFocus size={6}>
           {timezones.map((timezone, index) => (
             <option id="wcoption2" key={index} value={timezone}>
               {timezone}
@@ -99,6 +109,7 @@ export default function WorldClock() {
             </div>}
         </div>
         </div>
+        </div>:null}
     </>
   );
 }
