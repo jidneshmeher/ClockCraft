@@ -15,20 +15,16 @@ export default function WorldClock() {
   const {menubar} = useMenu()
 
   const hRegion = (event) => {
-    // console.log("Running 2")
-    console.log(event.target.value)
     setRegion(event.target.value);
   };
 
   axios.defaults.withCredentials = true
 
   useEffect(() => {
-    // console.log("")
     axios
       .get("https://clock-craft-server.vercel.app/api")
       .then((res) => {
         setTimezones(res.data);
-        console.log("Timezones Fetched")
       })
       .catch((err) => console.log(err));
   }, []);
@@ -41,7 +37,6 @@ export default function WorldClock() {
         let hour = currentTime.getHours()
         let min = currentTime.getMinutes()
         let sec = currentTime.getSeconds()
-        console.log(hour , min , sec)
         setHour(hour);
         setMin(min);
         setSec(sec - 1); // Decrementing sec for processing delay. (This will sync with the timezone in real-time.)

@@ -7,10 +7,7 @@ export default function DigitalClock(){
     const [time,setTime] = useState("");
     const {menubar,setMenubar} = useMenu()
 
-    console.log(menubar)
-
     useEffect(()=>{
-        console.log("Hi")
         let timer = setInterval(()=>{
             let hour = new Date().toLocaleTimeString();
             setTime(hour)

@@ -24,8 +24,6 @@ export default function AlarmRing() {
       etime.setMinutes(min);
       etime.setSeconds("0"+0);
       etime = etime.toLocaleTimeString().replace(/(\s\w+)/," "+meridiem);
-      console.log(stime);
-      console.log(etime);
       if (stime === etime) {
         setCheck(true);
         audio.loop = true;
